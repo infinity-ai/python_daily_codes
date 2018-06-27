@@ -1,0 +1,30 @@
+from collections import namedtuple
+
+Bracket = namedtuple("Bracket", ["char", "position"])
+
+def are_matching(left, right):
+    return (left+right) in ["()", "[]", "{}"]
+opening_brackets_stack = []
+def find_mismatch(text):
+    opening_brackets_stac = []
+    for i, next in enumerate(text):
+        if next in "([{":
+            opening_brackets_stack.append((next, i))
+            pass
+        if next in ")]}":
+            opening_brackets_stack.append((next, i))
+            pass
+
+def main():
+    text = input()
+    mismatch = find_mismatch(text)
+    if opening_brackets_stack.count('(') == opening_brackets_stack.count(')'):
+        print("Matched(")
+    elif opening_brackets_stack.count("[") == opening_brackets_stack.count(']'):
+        print("Matched[")
+    elif opening_brackets_stack.count("{") == opening_brackets_stack.count("}"):
+        print("Matched{")
+    else:print("Not Matched")
+
+if __name__ == "__main__":
+    main()
