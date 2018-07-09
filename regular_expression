@@ -1,0 +1,229 @@
+import re
+#Compile the pattern you want to search
+phonenumber = re.compile(r"(\d{3})-(\d{3}-\d{4})")
+#Search for the actual phonenumber with the search object
+number = phonenumber.search("My phone is 415-555-4242.")
+#group method from the search object will help to get the actual string of the phone number
+print("The phone number and the area code is "+ str(number.group(0)))#or just number.group()
+print("My phone number is " + str(number.group(2)))
+#area code
+print("The area code is "+str(number.group(1)))
+#To retrive all the available groups at once
+print(number.groups())
+areacode, phonenumber = number.groups()
+
+
+#Matching multiple groups
+name = re.compile(r'Mr.Trump|Mr.Obama')
+#The pipe(|)matches the first occouring pattern
+president = name.search("Mr.Trump is the current President of United States of America and Mr.Obama is the former President of United States of America")
+nameofthepresident = president.group()
+print("The name of the president is "+ str(nameofthepresident))
+#But the findall() method will help to find all the matching patterns
+#findall method will return list of matched pattern
+presidents = name.findall("Mr.Trump is the current President of United States of America and Mr.Obama is the former President of United States of America")
+print("The name of the currnet president in USA is " + str(presidents[0]))
+print("The name of the former President of USA is "+str(presidents[1]))
+#Matching available with pipe
+asset = re.compile(r"My (car|house|money)")
+name_asset = asset.search('My house is my asset')
+print(name_asset.group())
+print(name_asset.group(1))
+
+#optional matching with question mark
+#when you have to match either of one available pattern
+name_confusion = re.compile(r'Mr.O(sama)?(bama)')
+name_of_the_president = name_confusion.search("The name of the former President of USA is Mr.Obama")
+print(name_of_the_president.group())
+
+#Matching Zero (or) More with (*) astrick
+name = re.compile(r'Az(muth)*')
+creator = name.search('Azmuthmuthmuth')
+half_name = name.search("Az")
+print(half_name.group())
+print(creator.group())
+
+#Matching One or More with plus
+name = re.compile(r'(in)+finity.ai')
+infinity = name.search('infinity.ai')
+infinity1 = name.search('ininfinity.ai')
+infinity2 = name.search('finity.ai')
+print(infinity.group())
+print(infinity1.group())
+
+#Matching Specific repetition with curly brackets
+name = re.compile(r'(in){1,4}(finity.ai)*')
+infinity = name.search("inininfinity.ai")
+print(infinity.group())
+
+#Greedy and Non Greedy matching
+#{3-5} = infinfinf|infinfinfinfinf|infinfinfinfinf
+#the repeating element should be with in paranthesis
+name = re.compile(r"(in){3,5}?")
+inf = name.search("ininininin")
+print(inf.group())
+
+#Detailed findall method
+
+"""
+Shorthand character class
+
+Represents
+
+\d
+
+Any numeric digit from 0 to 9.
+
+\D
+
+Any character that is not a numeric digit from 0 to 9.
+
+\w
+
+Any letter, numeric digit, or the underscore character. (Think of this as matching “word” characters.)
+import re
+#Compile the pattern you want to search
+phonenumber = re.compile(r"(\d{3})-(\d{3}-\d{4})")
+#Search for the actual phonenumber with the search object
+number = phonenumber.search("My phone is 415-555-4242.")
+#group method from the search object will help to get the actual string of the phone number
+print("The phone number and the area code is "+ str(number.group(0)))#or just number.group()
+print("My phone number is " + str(number.group(2)))
+#area code
+print("The area code is "+str(number.group(1)))
+#To retrive all the available groups at once
+print(number.groups())
+areacode, phonenumber = number.groups()
+
+
+#Matching multiple groups
+name = re.compile(r'Mr.Trump|Mr.Obama')
+#The pipe(|)matches the first occouring pattern
+president = name.search("Mr.Trump is the current President of United States of America and Mr.Obama is the former President of United States of America")
+nameofthepresident = president.group()
+print("The name of the president is "+ str(nameofthepresident))
+#But the findall() method will help to find all the matching patterns
+#findall method will return list of matched pattern
+presidents = name.findall("Mr.Trump is the current President of United States of America and Mr.Obama is the former President of United States of America")
+print("The name of the currnet president in USA is " + str(presidents[0]))
+print("The name of the former President of USA is "+str(presidents[1]))
+#Matching available with pipe
+asset = re.compile(r"My (car|house|money)")
+name_asset = asset.search('My house is my asset')
+print(name_asset.group())
+print(name_asset.group(1))
+
+#optional matching with question mark
+#when you have to match either of one available pattern
+name_confusion = re.compile(r'Mr.O(sama)?(bama)')
+name_of_the_president = name_confusion.search("The name of the former President of USA is Mr.Obama")
+print(name_of_the_president.group())
+
+#Matching Zero (or) More with (*) astrick
+name = re.compile(r'Az(muth)*')
+creator = name.search('Azmuthmuthmuth')
+half_name = name.search("Az")
+print(half_name.group())
+print(creator.group())
+
+#Matching One or More with plus
+name = re.compile(r'(in)+finity.ai')
+infinity = name.search('infinity.ai')
+infinity1 = name.search('ininfinity.ai')
+infinity2 = name.search('finity.ai')
+print(infinity.group())
+print(infinity1.group())
+
+#Matching Specific repetition with curly brackets
+name = re.compile(r'(in){1,4}(finity.ai)*')
+infinity = name.search("inininfinity.ai")
+print(infinity.group())
+
+#Greedy and Non Greedy matching
+#{3-5} = infinfinf|infinfinfinfinf|infinfinfinfinf
+#the repeating element should be with in paranthesis
+name = re.compile(r"(in){3,5}?")
+inf = name.search("ininininin")
+print(inf.group())
+
+#Detailed findall method
+
+"""
+Shorthand character class
+
+Represents
+
+\d
+
+Any numeric digit from 0 to 9.
+
+\D
+
+Any character that is not a numeric digit from 0 to 9.
+
+\w
+
+Any letter, numeric digit, or the underscore character. (Think of this as matching “word” characters.)
+
+\W
+
+Any character that is not a letter, numeric digit, or the underscore character.
+
+\s
+
+Any space, tab, or newline character. (Think of this as matching “space” characters.)
+
+\S
+
+Any character that is not a space, tab, or newline."""
+
+
+basket = re.compile(r'\d+\s\w+')
+names = basket.findall('1 apples, 2 mangoes, 3 bananas, 4 Grapes, 5 lemon')
+print(names)
+
+#vowels
+vowels = re.compile(r'[aeiouAEIOU]')
+string = vowels.findall('Infinity.ai Welcome to the future')
+print(string)
+
+#alphabets
+alphabets = re.compile(r'[a-zA-Z0-9]')
+string = alphabets.findall('Any character that is not a numeric digit from 0 to 9.')
+print(string)
+
+#inside square brackets we do not need \ to escpe character
+alphabets = re.compile(r'[a-z()\']')
+string = alphabets.findall("'Any character \\ that is not a numeric digit((())'")
+print(string)
+\W
+
+Any character that is not a letter, numeric digit, or the underscore character.
+
+\s
+
+Any space, tab, or newline character. (Think of this as matching “space” characters.)
+
+\S
+
+Any character that is not a space, tab, or newline."""
+
+
+basket = re.compile(r'\d+\s\w+')
+names = basket.findall('1 apples, 2 mangoes, 3 bananas, 4 Grapes, 5 lemon')
+print(names)
+
+#vowels
+vowels = re.compile(r'[aeiouAEIOU]')
+string = vowels.findall('Infinity.ai Welcome to the future')
+print(string)
+
+#alphabets
+alphabets = re.compile(r'[a-zA-Z0-9]')
+string = alphabets.findall('Any character that is not a numeric digit from 0 to 9.')
+print(string)
+
+#inside square brackets we do not need \ to escpe character
+alphabets = re.compile(r'[a-z()\']')
+string = alphabets.findall("'Any character \\ that is not a numeric digit((())'")
+print(string)
