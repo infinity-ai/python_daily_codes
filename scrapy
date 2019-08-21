@@ -1,0 +1,54 @@
+import requests
+import scrapy
+import csv
+import pandas as pd
+
+
+page_no = 1
+pagination = set()
+class AmazonSpider(scrapy.Spider):
+    
+    name = 'amazon'
+    
+
+    start_urls = ['http://api.scraperapi.com/?api_key=a3358b32fff261d0731f81885460824b&url=' + 'https://www.amazon.com/s?k=womens+dresses']
+
+    def parse(self, response):
+ 
+        global page_no
+        data = ""
+        repeated_links = set()
+        BLOCK_SELECTOR = '.sg-row'
+        count = 1
+        for amazon in response.css(BLOCK_SELECTOR):
+
+            LIST = amazon.css('a ::attr(href)').extract_first()
+            
+            if LIST != None and LIST not in repeated_links and "/gp" not in LIST and "/b/ref=" not in LIST and "#s-" not in LIST:
+                repeated_links.add(LIST)
+                data += str(LIST) + "," + "\n"
+
+        with open('product_url_.txt', 'w') as csvfile:
+            csvfile.write(data)
+            csvfile.close()
+
+        with open('product_url_.txt', 'r') as file:
+            for line in file.readlines():
+                yield scrapy.Request('http://api.scraperapi.com/?api_key=a3358b32fff261d0731f81885460824b&url=' + "http://www.amazon.com" + line.strip(), self.parse_product)
+    
+    def parse_product(self, response):
+
+        data = ""
+        description = ""
+        title = response.css('span.a-size-large ::text').extract_first().strip() + "," + "\n"
+        review = response.css('.a-icon-alt ::text').extract_first().strip() + "," + "\n"
+        price_range = response.css('.priceBlockBuyingPriceString ::text').extract_first().strip() + "," + "\n"
+
+        for desc in response.css('div.a-spacing-medium > ul > li'):
+            description += desc.css('span.a-list-item ::text').extract_first().strip().replace("\n", "").replace("\t","") + "," + "\n"
+
+        raw_data = {'Product_name':title, 'Product_URL':data, 'Price_range': price_range, 'Review':review, 'Description': description}
+
+        df = pd.DataFrame( {'Product_name':[title], 'Product_URL':[data], 'Price_range': [price_range], 'Review':[review], 'Description': [description]}, row = ['Product_name', 'Product_URL', 'Price_range', 'Review', 'Description'])
+
+        df.to_csv('Product_sample.csv')
